@@ -15,11 +15,26 @@ const QN = 27 // bits after the binary point
 const MAX_Q = (1 << (QM + QN - 1)) - 1
 const MIN_Q = -(1 << (QM + QN - 1))
 
-var MAX_F float32 = q2f(MAX_Q) 
-var MIN_F float32 = q2f(MIN_Q) 
+var MAX_F float32 = q2f(MAX_Q)
+var MIN_F float32 = q2f(MIN_Q)
 
 func pow2(n int) float32 {
 	return float32(math.Pow(2.0, float64(n)))
+}
+
+func smmul(op1, op2 int32) int32 {
+	x := int64(op1) * int64(op2)
+	return (int32)(x >> 32)
+}
+
+func smmla(op1, op2, op3 int32) int32 {
+	x := (int64(op1) * int64(op2)) + (int64(op3) << 32)
+	return (int32)(x >> 32)
+}
+
+func smmls(op1, op2, op3 int32) int32 {
+	x := (int64(op1) * int64(op2)) - (int64(op3) << 32)
+	return (int32)(x >> 32)
 }
 
 // return the float for the q value
