@@ -40,25 +40,25 @@ func smmlsr(op1, op2, op3 int32) int32 {
 //LSL #s where s is in the range 0 to 31.
 
 // ARM SSAT operation
-func ssat(rd int32, n, s int) int32 {
+func ssat(op1 int32, n, s int) int32 {
 	if n < 1 || n > 32 {
 		panic("n out of range")
 	}
 	if s < -31 || s > 31 {
 		panic("s out of range")
 	}
-	// TODO
-	return rd
+	var x int32
+	return x
 }
 
 // ARM USAT operation
-func usat(rd int32, n, s int) uint32 {
+func usat(op1 uint32, n, s int) uint32 {
 	if n < 0 || n > 31 {
 		panic("n out of range")
 	}
 	if s < -31 || s > 31 {
 		panic("s out of range")
 	}
-	// TODO
-	return uint32(rd)
+	var x uint32
+	return x
 }
