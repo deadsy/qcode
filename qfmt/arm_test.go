@@ -332,9 +332,11 @@ func Test_SSAT(t *testing.T) {
 	}
 }
 
+/*
+
 func Test_USAT(t *testing.T) {
 	tests := []struct {
-		op1    uint32
+		op1    int32
 		n      int
 		result uint32
 	}{
@@ -411,3 +413,5 @@ func Test_USAT(t *testing.T) {
 		}
 	}
 }
+
+*/
