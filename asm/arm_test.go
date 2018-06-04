@@ -1,4 +1,4 @@
-package qfmt
+package asm
 
 import (
 	"fmt"
@@ -51,7 +51,7 @@ func Test_SMMUL(t *testing.T) {
 		{-2128338222, -1083531471, 536935740},
 	}
 	for _, v := range tests {
-		r := smmul(v.op1, v.op2)
+		r := SMMUL(v.op1, v.op2)
 		if r != v.result {
 			fmt.Printf("%+v %d (expected) %d (actual)\n", v, v.result, r)
 			t.Error("FAIL")
@@ -94,7 +94,7 @@ func Test_SMMULR(t *testing.T) {
 		{279576856, 1430779761, 93135263},
 	}
 	for _, v := range tests {
-		r := smmulr(v.op1, v.op2)
+		r := SMMULR(v.op1, v.op2)
 		if r != v.result {
 			fmt.Printf("%+v %d (expected) %d (actual)\n", v, v.result, r)
 			t.Error("FAIL")
@@ -149,7 +149,7 @@ func Test_SMMLA(t *testing.T) {
 		{-1643857949, -1801763474, -1235754083, -546146223},
 	}
 	for _, v := range tests {
-		r := smmla(v.op1, v.op2, v.op3)
+		r := SMMLA(v.op1, v.op2, v.op3)
 		if r != v.result {
 			fmt.Printf("%+v %d (expected) %d (actual)\n", v, v.result, r)
 			t.Error("FAIL")
@@ -185,7 +185,7 @@ func Test_SMMLAR(t *testing.T) {
 		{1582833795, 1841295872, -1651915321, -973338482},
 	}
 	for _, v := range tests {
-		r := smmlar(v.op1, v.op2, v.op3)
+		r := SMMLAR(v.op1, v.op2, v.op3)
 		if r != v.result {
 			fmt.Printf("%+v %d (expected) %d (actual)\n", v, v.result, r)
 			t.Error("FAIL")
@@ -240,7 +240,7 @@ func Test_SMMLS(t *testing.T) {
 		{-1643857949, -1801763474, -1235754083, -1925361944},
 	}
 	for _, v := range tests {
-		r := smmls(v.op1, v.op2, v.op3)
+		r := SMMLS(v.op1, v.op2, v.op3)
 		if r != v.result {
 			fmt.Printf("%+v %d (expected) %d (actual)\n", v, v.result, r)
 			t.Error("FAIL")
@@ -276,7 +276,7 @@ func Test_SMMLSR(t *testing.T) {
 		{-1932155006, -1601323487, -87174700, -807553920},
 	}
 	for _, v := range tests {
-		r := smmlsr(v.op1, v.op2, v.op3)
+		r := SMMLSR(v.op1, v.op2, v.op3)
 		if r != v.result {
 			fmt.Printf("%+v %d (expected) %d (actual)\n", v, v.result, r)
 			t.Error("FAIL")
@@ -324,7 +324,7 @@ func Test_SSAT(t *testing.T) {
 		{15233004, 32, 15233004},
 	}
 	for _, v := range tests {
-		r := ssat(v.op1, v.n, 0)
+		r := SSAT(v.op1, v.n, 0)
 		if r != v.result {
 			fmt.Printf("%+v %d (expected) %d (actual)\n", v, v.result, r)
 			t.Error("FAIL")
@@ -406,7 +406,7 @@ func Test_USAT(t *testing.T) {
 		{0xF47B7D4A, 31, 0x00000000},
 	}
 	for _, v := range tests {
-		r := usat(v.op1, v.n, 0)
+		r := USAT(v.op1, v.n, 0)
 		if r != v.result {
 			fmt.Printf("%+v %d (expected) %d (actual)\n", v, v.result, r)
 			t.Error("FAIL")
