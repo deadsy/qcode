@@ -42,8 +42,8 @@ func sin(x Q20) Q31 {
 
 func interpolate(x, y0, y1 Q27) Q27 {
 
-	k0 := x.Frac() << 4
-	k1 := math.MaxInt32 - k0
+	k1 := x.Frac() << 4
+	k0 := math.MaxInt32 - k1
 
 	r := asm.SMMUL(int32(y0), k0)
 	r = asm.SMMLA(int32(y1), k1, r)
@@ -64,17 +64,24 @@ func test1() {
 }
 
 func test2() {
-	y0 := F32_to_Q27(0.0)
-	y1 := F32_to_Q27(10.0)
-	x := F32_to_Q27(0.5)
-	y := interpolate(x, y0, y1)
-	fmt.Printf("%f\n", y.F32())
+
+	var x, y, y0, y1 Q27
+
+	y0 = F32_to_Q27(-7.0)
+	y1 = F32_to_Q27(13.0)
+
+	const STEPS = 100
+	for i := 0; i < STEPS; i++ {
+		x = F32_to_Q27(float32(i) / STEPS)
+		y = interpolate(x, y0, y1)
+		fmt.Printf("%f: %f\n", x.F32(), y.F32())
+	}
 }
 
 //-----------------------------------------------------------------------------
 
 func main() {
-	test1()
+	test2()
 }
 
 //-----------------------------------------------------------------------------
