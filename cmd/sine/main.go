@@ -7,46 +7,74 @@ import (
 	"math"
 
 	"github.com/deadsy/qcode/asm"
-	"github.com/deadsy/qcode/qfmt"
+	. "github.com/deadsy/qcode/qfmt"
 )
 
 //-----------------------------------------------------------------------------
 
 const SINE2TSIZE = 4096
 
-var sine2t [SINE2TSIZE + 1]int32
+var sine2t [SINE2TSIZE + 1]Q31
 
 func sin_init() {
 	for i := 0; i < SINE2TSIZE+1; i++ {
 		f := (float64(i) * 2.0 * math.Pi) / SINE2TSIZE
-		sine2t[i] = int32(math.MaxInt32 * math.Sin(f))
+		sine2t[i] = Q31(math.MaxInt32 * math.Sin(f))
 	}
 }
 
-func sin_q31(phase int32) qfmt.Q1_31 {
+func sin(x Q20) Q31 {
 
-	p := uint32(phase)
-	pi := p >> 20
+	k := uint32(x) >> 20
+	k0 := x.Frac() << 11
+	k1 := math.MaxInt32 - k0
 
-	y1 := sine2t[pi]
-	y2 := sine2t[1+pi]
-	pf := int32((p & 0xfffff) << 11)
-	pfc := math.MaxInt32 - pf
+	y0 := sine2t[k]
+	y1 := sine2t[k+1]
 
-	rr := asm.SMMUL(y1, pfc)
-	rr = asm.SMMLA(y2, pf, rr)
+	r := asm.SMMUL(int32(y0), k0)
+	r = asm.SMMLA(int32(y1), k1, r)
 
-	return qfmt.Q1_31(rr << 1)
+	return Q31(r << 1)
+}
+
+//-----------------------------------------------------------------------------
+
+func interpolate(x, y0, y1 Q27) Q27 {
+
+	k0 := x.Frac() << 4
+	k1 := math.MaxInt32 - k0
+
+	r := asm.SMMUL(int32(y0), k0)
+	r = asm.SMMLA(int32(y1), k1, r)
+
+	return Q27(r << 1)
+}
+
+//-----------------------------------------------------------------------------
+
+func test1() {
+	sin_init()
+	var i int32
+	for i = -2048; i <= 2047; i++ {
+		x := Q20(i << 20)
+		y := sin(x)
+		fmt.Printf("%f: %f\n", x.F32(), y.F32())
+	}
+}
+
+func test2() {
+	y0 := F32_to_Q27(0.0)
+	y1 := F32_to_Q27(10.0)
+	x := F32_to_Q27(0.5)
+	y := interpolate(x, y0, y1)
+	fmt.Printf("%f\n", y.F32())
 }
 
 //-----------------------------------------------------------------------------
 
 func main() {
-	sin_init()
-	var i int32
-	for i = -2048; i < 2047; i++ {
-		fmt.Printf("%d: %f\n", i, sin_q31(i<<20).F32())
-	}
+	test1()
 }
 
 //-----------------------------------------------------------------------------
