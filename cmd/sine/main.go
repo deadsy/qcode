@@ -43,10 +43,10 @@ func sin_q31(phase int32) qfmt.Q1_31 {
 
 func main() {
 	sin_init()
-  var i int32
-  for i = -2048; i < 2047; i ++ {
-    fmt.Printf("%d: %f\n", i, sin_q31(i << 20).F32())
-  }
+	var i int32
+	for i = -2048; i < 2047; i++ {
+		fmt.Printf("%d: %f\n", i, sin_q31(i<<20).F32())
+	}
 }
 
 //-----------------------------------------------------------------------------
